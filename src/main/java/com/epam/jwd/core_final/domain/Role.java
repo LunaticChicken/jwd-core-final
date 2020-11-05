@@ -31,7 +31,13 @@ public enum Role implements BaseEntity {
      * todo via java.lang.enum methods!
      * @throws UnknownEntityException if such id does not exist
      */
-    public static Role resolveRoleById(int id) {
-        return null;
+    public static Role resolveRoleById(int id) throws UnknownEntityException {
+        switch (id) {
+            case 1: return Role.MISSION_SPECIALIST;
+            case 2: return Role.FLIGHT_ENGINEER;
+            case 3: return Role.PILOT;
+            case 4: return Role.COMMANDER;
+            default: throw new UnknownEntityException("Rank id is not correct");
+        }
     }
 }
