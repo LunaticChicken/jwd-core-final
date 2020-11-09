@@ -1,5 +1,8 @@
 package com.epam.jwd.core_final.domain;
 
+import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
+import com.epam.jwd.core_final.criteria.Criteria;
+
 /**
  * Expected fields:
  * <p>
@@ -11,7 +14,7 @@ public class CrewMember extends AbstractBaseEntity {
     // todo
     private Role role;
     private Rank rank;
-    private Boolean isReadyForNextMissions = true;
+    private Boolean isReadyForNextMission = true;
 
     public CrewMember(Role role, String name, Rank rank) {
         super(name);
@@ -19,12 +22,20 @@ public class CrewMember extends AbstractBaseEntity {
         this.rank = rank;
     }
 
-    public Boolean getReadyForNextMissions() {
-        return isReadyForNextMissions;
+    public Role getRole() {
+        return role;
     }
 
-    public void setReadyForNextMissions(Boolean readyForNextMissions) {
-        isReadyForNextMissions = readyForNextMissions;
+    public Rank getRank() {
+        return rank;
+    }
+
+    public Boolean getReadyForNextMission() {
+        return isReadyForNextMission;
+    }
+
+    public void setReadyForNextMission(Boolean readyForNextMissions) {
+        isReadyForNextMission = readyForNextMissions;
     }
 
     @Override

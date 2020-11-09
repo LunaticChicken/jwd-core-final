@@ -7,10 +7,11 @@ package com.epam.jwd.core_final.domain;
  * name {@link String} - entity name
  */
 public abstract class AbstractBaseEntity implements BaseEntity {
-    private Long id;
+    private Long id = 0L;
     private String name;
 
     public AbstractBaseEntity(String name) {
+        id++;
         this.name = name;
     }
 

@@ -1,10 +1,11 @@
 package com.epam.jwd.core_final.context.impl;
 
 import com.epam.jwd.core_final.context.ApplicationContext;
-import com.epam.jwd.core_final.domain.ApplicationProperties;
-import com.epam.jwd.core_final.domain.BaseEntity;
-import com.epam.jwd.core_final.domain.CrewMember;
-import com.epam.jwd.core_final.domain.Spaceship;
+import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
+import com.epam.jwd.core_final.criteria.Criteria;
+import com.epam.jwd.core_final.criteria.MissionCriteria;
+import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
+import com.epam.jwd.core_final.domain.*;
 import com.epam.jwd.core_final.exception.InvalidStateException;
 import com.epam.jwd.core_final.service.impl.CrewServiceImpl;
 import com.epam.jwd.core_final.service.impl.SpaceshipServiceImpl;
@@ -13,18 +14,24 @@ import com.epam.jwd.core_final.strategy.SpaceshipReadingStrategy;
 import com.epam.jwd.core_final.util.PropertyReaderUtil;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 // todo
 public class NassaContext implements ApplicationContext {
 
     ApplicationProperties properties = PropertyReaderUtil.loadProperties();
-    private static NassaContext instance;
+
+    private Criteria crewCriteria = CrewMemberCriteria.getInstance();
+    private Criteria spaceshipCriteria = SpaceshipCriteria.getInstance();
+    private Criteria missionCriteria = MissionCriteria.getInstance();
     // no getters/setters for them
-    private static Collection<CrewMember> crewMembers = new ArrayList<>();
-    private static Collection<Spaceship> spaceships = new ArrayList<>();
+    private static final Collection<CrewMember> crewMembers = new ArrayList<>();
+    private static final Collection<Spaceship> spaceships = new ArrayList<>();
+    private static final Collection<Mission> missions = new ArrayList<>();
+
+    private static NassaContext instance;
+
+    private NassaContext() {}
 
     public static NassaContext getInstance() {
         if (instance == null) {
@@ -35,7 +42,37 @@ public class NassaContext implements ApplicationContext {
 
     @Override
     public <T extends BaseEntity> Collection<T> retrieveBaseEntityList(Class<T> tClass) {
-        return null;
+        if (tClass.equals(CrewMember.class)) {
+            return (Collection<T>) crewMembers;
+        }
+        if (tClass.equals(Spaceship.class)) {
+            return (Collection<T>) spaceships;
+        }
+        return (Collection<T>) missions;
+    }
+
+    public Criteria getCrewCriteria() {
+        return crewCriteria;
+    }
+
+    public void setCrewCriteria(Criteria crewCriteria) {
+        this.crewCriteria = crewCriteria;
+    }
+
+    public Criteria getSpaceshipCriteria() {
+        return spaceshipCriteria;
+    }
+
+    public void setSpaceshipCriteria(Criteria spaceshipCriteria) {
+        this.spaceshipCriteria = spaceshipCriteria;
+    }
+
+    public Criteria getMissionCriteria() {
+        return missionCriteria;
+    }
+
+    public void setMissionCriteria(Criteria missionCriteria) {
+        this.missionCriteria = missionCriteria;
     }
 
     /**

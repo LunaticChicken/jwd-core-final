@@ -1,7 +1,8 @@
 package com.epam.jwd.core_final.service.impl;
 
+import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.criteria.Criteria;
-import com.epam.jwd.core_final.domain.Rank;
+import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
 import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.factory.impl.CrewMemberFactory;
@@ -9,14 +10,13 @@ import com.epam.jwd.core_final.factory.impl.SpaceshipFactory;
 import com.epam.jwd.core_final.service.SpaceshipService;
 import com.epam.jwd.core_final.util.TypeConversionUtil;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class SpaceshipServiceImpl implements SpaceshipService {
 
     private static SpaceshipServiceImpl instance;
+
+    private SpaceshipServiceImpl() {}
 
     public static SpaceshipServiceImpl getInstance() {
         if (instance == null) {
@@ -26,17 +26,34 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     @Override
-    public List<Spaceship> findAllSpaceships() {
-        return null;
+    public Collection<Spaceship> findAllSpaceships() {
+        return NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class);
     }
 
     @Override
-    public List<Spaceship> findAllSpaceshipsByCriteria(Criteria<? extends Spaceship> criteria) {
-        return null;
+    public Collection<Spaceship> findAllSpaceshipsByCriteria(SpaceshipCriteria criteria) {
+        Collection<Spaceship> filteredSpaceships = new ArrayList<>();
+        Collection<Spaceship> spaceships = NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class);
+        for (Spaceship spaceship : spaceships) {
+            if (criteria.getId() != null && !spaceship.getId().equals(criteria.getId())) continue;
+            if (criteria.getName() != null && !spaceship.getName().equals(criteria.getName())) continue;
+            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance())) continue;
+            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission())) continue;
+            filteredSpaceships.add(spaceship);
+        }
+        return filteredSpaceships;
     }
 
     @Override
-    public Optional<Spaceship> findSpaceshipByCriteria(Criteria<? extends Spaceship> criteria) {
+    public Optional<Spaceship> findSpaceshipByCriteria(SpaceshipCriteria criteria) {
+        Collection<Spaceship> spaceships = NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class);
+        for (Spaceship spaceship : spaceships) {
+            if (criteria.getId() != null && !spaceship.getId().equals(criteria.getId())) continue;
+            if (criteria.getName() != null && !spaceship.getName().equals(criteria.getName())) continue;
+            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance())) continue;
+            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission())) continue;
+            return Optional.of(spaceship);
+        }
         return Optional.empty();
     }
 

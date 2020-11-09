@@ -1,8 +1,10 @@
 package com.epam.jwd.core_final.service;
 
 import com.epam.jwd.core_final.criteria.Criteria;
+import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
 import com.epam.jwd.core_final.domain.Spaceship;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +14,11 @@ import java.util.Optional;
  */
 public interface SpaceshipService {
 
-    List<Spaceship> findAllSpaceships();
+    Collection<Spaceship> findAllSpaceships();
 
-    List<Spaceship> findAllSpaceshipsByCriteria(Criteria<? extends Spaceship> criteria);
+    Collection<Spaceship> findAllSpaceshipsByCriteria(SpaceshipCriteria criteria);
 
-    Optional<Spaceship> findSpaceshipByCriteria(Criteria<? extends Spaceship> criteria);
+    Optional<Spaceship> findSpaceshipByCriteria(SpaceshipCriteria criteria);
 
     Spaceship updateSpaceshipDetails(Spaceship spaceship);
 

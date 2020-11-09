@@ -1,20 +1,23 @@
 package com.epam.jwd.core_final.service;
 
 import com.epam.jwd.core_final.criteria.Criteria;
-import com.epam.jwd.core_final.domain.FlightMission;
+import com.epam.jwd.core_final.criteria.MissionCriteria;
+import com.epam.jwd.core_final.domain.Mission;
 
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface MissionService {
 
-    List<FlightMission> findAllMissions();
+    Collection<Mission> findAllMissions();
 
-    List<FlightMission> findAllMissionsByCriteria(Criteria<? extends FlightMission> criteria);
+    Collection<Mission> findAllMissionsByCriteria(MissionCriteria criteria);
 
-    Optional<FlightMission> findMissionByCriteria(Criteria<? extends FlightMission> criteria);
+    Optional<Mission> findMissionByCriteria(MissionCriteria criteria);
 
-    FlightMission updateSpaceshipDetails(FlightMission flightMission);
+    Mission updateSpaceshipDetails(Mission mission);
 
-    FlightMission createMission(FlightMission flightMission);
+    Mission createMission(String name, String sStartDate, String sEndDate, Long distance);
 }

@@ -8,7 +8,7 @@ import com.epam.jwd.core_final.factory.EntityFactory;
 
 import java.util.Map;
 
-public class SpaceshipFactory implements EntityFactory {
+public class SpaceshipFactory implements EntityFactory<Spaceship> {
 
     private static SpaceshipFactory instance;
 
