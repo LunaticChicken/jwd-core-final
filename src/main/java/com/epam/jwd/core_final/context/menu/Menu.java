@@ -1,5 +1,6 @@
 package com.epam.jwd.core_final.context.menu;
 
+import com.epam.jwd.core_final.exception.MissionNotCreatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,5 +11,5 @@ public abstract class Menu {
     public static Logger logger = LoggerFactory.getLogger(Menu.class);
 
     abstract public void printAvailableOptions();
-    abstract public void handleUserInput();
+    abstract public void handleUserInput() throws MissionNotCreatedException;
 }

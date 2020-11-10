@@ -4,6 +4,7 @@ import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
 import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.domain.CrewMember;
+import com.epam.jwd.core_final.domain.Mission;
 import com.epam.jwd.core_final.domain.Rank;
 import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.factory.impl.CrewMemberFactory;
@@ -18,7 +19,8 @@ public class CrewServiceImpl implements CrewService {
 
     private static CrewServiceImpl instance;
 
-    private CrewServiceImpl() {}
+    private CrewServiceImpl() {
+    }
 
     public static CrewServiceImpl getInstance() {
         if (instance == null) {
@@ -33,7 +35,7 @@ public class CrewServiceImpl implements CrewService {
     }
 
     @Override
-    public Collection<CrewMember> findAllCrewMembersByCriteria(CrewMemberCriteria criteria){
+    public Collection<CrewMember> findAllCrewMembersByCriteria(CrewMemberCriteria criteria) {
         Collection<CrewMember> filteredCrew = new ArrayList<>();
         Collection<CrewMember> crew = NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class);
         for (CrewMember crewMember : crew) {
@@ -69,8 +71,21 @@ public class CrewServiceImpl implements CrewService {
     }
 
     @Override
-    public void assignCrewMemberOnMission(CrewMember crewMember) throws RuntimeException {
-
+    public boolean assignCrewMembersOnMission(Mission mission) throws RuntimeException {
+        externalLoop:
+        for (CrewMember crewMember : NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class)) {
+            for (Map.Entry<Role, Short> mapEntry : mission.getAssignedSpaceship().getCrew().entrySet()) {
+                if (mission.getAssignedCrew().stream()
+                        .filter(c -> c.getRole() == mapEntry.getKey()).count() >= mapEntry.getValue()) {
+                    break externalLoop;
+                }
+                if (crewMember.getReadyForNextMission() && crewMember.getRole() == mapEntry.getKey()) {
+                    mission.getAssignedCrew().add(crewMember);
+                    crewMember.setReadyForNextMission(false);
+                }
+            }
+        }
+        return mission.getAssignedCrew().size() != 0;
     }
 
     @Override

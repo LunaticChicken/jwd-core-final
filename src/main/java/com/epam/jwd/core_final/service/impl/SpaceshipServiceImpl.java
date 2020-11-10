@@ -3,6 +3,7 @@ package com.epam.jwd.core_final.service.impl;
 import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
+import com.epam.jwd.core_final.domain.Mission;
 import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.factory.impl.CrewMemberFactory;
@@ -63,8 +64,15 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     @Override
-    public void assignSpaceshipOnMission(Spaceship crewMember) throws RuntimeException {
-
+    public boolean assignSpaceshipOnMission(Mission mission) throws RuntimeException {
+        for (Spaceship spaceship : NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class)) {
+            if (spaceship.getReadyForNextMission() && spaceship.getFlightDistance() >= mission.getMissionDistance()) {
+                mission.setAssignedSpaceship(spaceship);
+                spaceship.setReadyForNextMission(false);
+                break;
+            }
+        }
+        return mission.getAssignedSpaceship() != null;
     }
 
     @Override

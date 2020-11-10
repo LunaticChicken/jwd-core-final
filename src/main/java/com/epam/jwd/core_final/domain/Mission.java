@@ -32,24 +32,6 @@ public class Mission extends AbstractBaseEntity {
         this.startDate = startDate;
         this.endDate = endDate;
         this.missionDistance = missionDistance;
-        for (Spaceship spaceship : NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class)) {
-            if (spaceship.getReadyForNextMission() && spaceship.getFlightDistance() >= missionDistance) {
-                this.assignedSpaceship = spaceship;
-                spaceship.setReadyForNextMission(false);
-                break;
-            }
-        }
-        externalLoop:
-        for (CrewMember crewMember : NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class)) {
-            for (Map.Entry<Role, Short> mapEntry : assignedSpaceship.getCrew().entrySet()) {
-                if (crewMember.getReadyForNextMission() && crewMember.getRole() == mapEntry.getKey() &&
-                        assignedCrew.stream().filter(c -> c.getRole() == mapEntry.getKey()).count() <= mapEntry.getValue()) {
-                    assignedCrew.add(crewMember);
-                    crewMember.setReadyForNextMission(false);
-                    break externalLoop;
-                }
-            }
-        }
     }
 
     public LocalDateTime getStartDate() {
