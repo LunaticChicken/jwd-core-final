@@ -83,4 +83,16 @@ public class Mission extends AbstractBaseEntity {
     public void setAssignedCrew(List<CrewMember> assignedCrew) {
         this.assignedCrew = assignedCrew;
     }
+
+    @Override
+    public String toString() {
+        return "Mission{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", missionDistance=" + missionDistance +
+                ", assignedSpaceship=" + assignedSpaceship +
+                ", assignedCrew=" + assignedCrew +
+                ", missionResult=" + missionResult +
+                '}';
+    }
 }

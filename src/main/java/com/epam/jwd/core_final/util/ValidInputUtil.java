@@ -3,6 +3,8 @@ package com.epam.jwd.core_final.util;
 import com.epam.jwd.core_final.domain.Rank;
 import com.epam.jwd.core_final.domain.Role;
 
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
 import java.util.Scanner;
 
 public final class ValidInputUtil {
@@ -65,16 +67,43 @@ public final class ValidInputUtil {
         if (input.length() != dateFormat.length()) {
             return false;
         }
-        // format = "yyyy-MM-dd HH:mm:ss"
-        // input = "2020-12-12 12:12:12"
-        // input = "12-12-2002 12/12/12"
-        char[] availableSplitters = {':', '-', ' ', '.', '/'};
-        for (int i = 0; i < input.length(); i++) {
-            for (char availableSplitter : availableSplitters) {
-                if (input.charAt(i) == availableSplitter && dateFormat.charAt(i) != availableSplitter) {
-                    return false;
+        int year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0;
+        try {
+            for (int i = 0; i < dateFormat.length(); i++) {
+                switch (dateFormat.charAt(i)) {
+                    case 'y':
+                        year = Integer.parseInt(input.substring(i, i + 4));
+                        i += 4;
+                        break;
+                    case 'M':
+                        month = Integer.parseInt(input.substring(i, i + 2));
+                        i += 2;
+                        break;
+                    case 'd':
+                        day = Integer.parseInt(input.substring(i, i + 2));
+                        i += 2;
+                        break;
+                    case 'H':
+                        hour = Integer.parseInt(input.substring(i, i + 2));
+                        i += 2;
+                        break;
+                    case 'm':
+                        minute = Integer.parseInt(input.substring(i, i + 2));
+                        i += 2;
+                        break;
+                    case 's':
+                        second = Integer.parseInt(input.substring(i, i + 2));
+                        i += 2;
+                        break;
                 }
             }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        try {
+            LocalDateTime.of(year, month, day, hour, minute, second);
+        } catch (DateTimeException e) {
+            return false;
         }
         return true;
     }

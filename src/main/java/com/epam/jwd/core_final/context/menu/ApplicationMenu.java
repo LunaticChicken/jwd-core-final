@@ -29,6 +29,7 @@ public final class ApplicationMenu extends Menu {
     }
 
     public void handleUserInput() {
+        logger.info("Main menu was opened");
         externalLoop:
         while (true) {
             int option = ValidInputUtil.getValidIntNumber(scanner);
@@ -45,7 +46,7 @@ public final class ApplicationMenu extends Menu {
                     break;
                 case 3:
                     System.out.println("Enter mission name:");
-                    String missionName = scanner.nextLine();
+                    String missionName = scanner.next();
                     System.out.println("Enter start date:");
                     String startDate = getDateTime();
                     System.out.println("Enter end date:");
@@ -54,6 +55,8 @@ public final class ApplicationMenu extends Menu {
                     Long distance = ValidInputUtil.getValidLongNumber(scanner);
                     NassaContext.getInstance().retrieveBaseEntityList(Mission.class).add(
                             MissionServiceImpl.getInstance().createMission(missionName, startDate, endDate, distance));
+                    System.out.println("Mission created!");
+                    printAvailableOptions();
                     break;
                 case 0:
                     scanner.close();
@@ -69,7 +72,9 @@ public final class ApplicationMenu extends Menu {
     private static String getDateTime() {
         String startDateTime;
         while (true) {
-            startDateTime = scanner.nextLine();
+            String startDate = scanner.next();
+            String startTime = scanner.next();
+            startDateTime = startDate + " " + startTime;
             if (ValidInputUtil.isInputEqualsDateFormat(startDateTime)) break;
             else System.out.println("Not correct date format! Try again:");
         }
