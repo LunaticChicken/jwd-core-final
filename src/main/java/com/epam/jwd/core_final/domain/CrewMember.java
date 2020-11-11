@@ -1,8 +1,5 @@
 package com.epam.jwd.core_final.domain;
 
-import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
-import com.epam.jwd.core_final.criteria.Criteria;
-
 /**
  * Expected fields:
  * <p>

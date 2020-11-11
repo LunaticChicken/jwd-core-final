@@ -1,12 +1,10 @@
 package com.epam.jwd.core_final.service.impl;
 
 import com.epam.jwd.core_final.context.impl.NassaContext;
-import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
 import com.epam.jwd.core_final.domain.Mission;
 import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.domain.Spaceship;
-import com.epam.jwd.core_final.factory.impl.CrewMemberFactory;
 import com.epam.jwd.core_final.factory.impl.SpaceshipFactory;
 import com.epam.jwd.core_final.service.SpaceshipService;
 import com.epam.jwd.core_final.util.TypeConversionUtil;
@@ -17,7 +15,8 @@ public class SpaceshipServiceImpl implements SpaceshipService {
 
     private static SpaceshipServiceImpl instance;
 
-    private SpaceshipServiceImpl() {}
+    private SpaceshipServiceImpl() {
+    }
 
     public static SpaceshipServiceImpl getInstance() {
         if (instance == null) {
@@ -38,8 +37,10 @@ public class SpaceshipServiceImpl implements SpaceshipService {
         for (Spaceship spaceship : spaceships) {
             if (criteria.getId() != null && !spaceship.getId().equals(criteria.getId())) continue;
             if (criteria.getName() != null && !spaceship.getName().equals(criteria.getName())) continue;
-            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance())) continue;
-            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission())) continue;
+            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance()))
+                continue;
+            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission()))
+                continue;
             filteredSpaceships.add(spaceship);
         }
         return filteredSpaceships;
@@ -51,8 +52,10 @@ public class SpaceshipServiceImpl implements SpaceshipService {
         for (Spaceship spaceship : spaceships) {
             if (criteria.getId() != null && !spaceship.getId().equals(criteria.getId())) continue;
             if (criteria.getName() != null && !spaceship.getName().equals(criteria.getName())) continue;
-            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance())) continue;
-            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission())) continue;
+            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance()))
+                continue;
+            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission()))
+                continue;
             return Optional.of(spaceship);
         }
         return Optional.empty();

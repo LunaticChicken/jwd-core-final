@@ -22,7 +22,7 @@ public final class InfoMenu extends Menu {
     @Override
     public void printAvailableOptions() {
         System.out.println("1 - Show crew members\n"
-                + "2 - Show spaceship\n"
+                + "2 - Show spaceships\n"
                 + "3 - Show missions\n"
                 + "0 - Back");
     }

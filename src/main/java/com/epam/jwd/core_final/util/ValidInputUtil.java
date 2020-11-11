@@ -26,7 +26,7 @@ public final class ValidInputUtil {
                 return scanner.nextLong();
             }
             System.out.println("You should input a number! Try again:");
-            scanner.nextLong();
+            scanner.next();
         }
         return null;
     }

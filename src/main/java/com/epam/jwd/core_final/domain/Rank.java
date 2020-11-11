@@ -34,11 +34,16 @@ public enum Rank implements BaseEntity {
      */
     public static Rank resolveRankById(int id) throws UnknownEntityException {
         switch (id) {
-            case 1: return Rank.TRAINEE;
-            case 2: return Rank.FIRST_OFFICER;
-            case 3: return Rank.SECOND_OFFICER;
-            case 4: return Rank.CAPTAIN;
-            default: throw new UnknownEntityException("Rank id is not correct");
+            case 1:
+                return Rank.TRAINEE;
+            case 2:
+                return Rank.FIRST_OFFICER;
+            case 3:
+                return Rank.SECOND_OFFICER;
+            case 4:
+                return Rank.CAPTAIN;
+            default:
+                throw new UnknownEntityException("Rank id is not correct");
         }
     }
 }

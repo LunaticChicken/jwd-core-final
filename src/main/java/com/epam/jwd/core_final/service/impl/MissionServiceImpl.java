@@ -1,10 +1,8 @@
 package com.epam.jwd.core_final.service.impl;
 
 import com.epam.jwd.core_final.context.impl.NassaContext;
-import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.criteria.MissionCriteria;
 import com.epam.jwd.core_final.domain.Mission;
-import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.factory.impl.MissionFactory;
 import com.epam.jwd.core_final.service.MissionService;
 import com.epam.jwd.core_final.util.TypeConversionUtil;
@@ -12,14 +10,14 @@ import com.epam.jwd.core_final.util.TypeConversionUtil;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public class MissionServiceImpl implements MissionService {
 
     private static MissionServiceImpl instance;
 
-    private MissionServiceImpl() {}
+    private MissionServiceImpl() {
+    }
 
     public static MissionServiceImpl getInstance() {
         if (instance == null) {
@@ -40,10 +38,12 @@ public class MissionServiceImpl implements MissionService {
         for (Mission mission : missions) {
             if (criteria.getId() != null && !mission.getId().equals(criteria.getId())) continue;
             if (criteria.getName() != null && !mission.getName().equals(criteria.getName())) continue;
-            if (criteria.getMissionDistance() != null && !mission.getMissionDistance().equals(criteria.getMissionDistance())) continue;
+            if (criteria.getMissionDistance() != null && !mission.getMissionDistance().equals(criteria.getMissionDistance()))
+                continue;
             if (criteria.getStartDate() != null && !mission.getStartDate().equals(criteria.getStartDate())) continue;
             if (criteria.getEndDate() != null && !mission.getEndDate().equals(criteria.getEndDate())) continue;
-            if (criteria.getMissionResult() != null && !mission.getMissionResult().equals(criteria.getMissionResult())) continue;
+            if (criteria.getMissionResult() != null && !mission.getMissionResult().equals(criteria.getMissionResult()))
+                continue;
             filteredMissions.add(mission);
         }
         return filteredMissions;
@@ -55,10 +55,12 @@ public class MissionServiceImpl implements MissionService {
         for (Mission mission : missions) {
             if (criteria.getId() != null && !mission.getId().equals(criteria.getId())) continue;
             if (criteria.getName() != null && !mission.getName().equals(criteria.getName())) continue;
-            if (criteria.getMissionDistance() != null && !mission.getMissionDistance().equals(criteria.getMissionDistance())) continue;
+            if (criteria.getMissionDistance() != null && !mission.getMissionDistance().equals(criteria.getMissionDistance()))
+                continue;
             if (criteria.getStartDate() != null && !mission.getStartDate().equals(criteria.getStartDate())) continue;
             if (criteria.getEndDate() != null && !mission.getEndDate().equals(criteria.getEndDate())) continue;
-            if (criteria.getMissionResult() != null && !mission.getMissionResult().equals(criteria.getMissionResult())) continue;
+            if (criteria.getMissionResult() != null && !mission.getMissionResult().equals(criteria.getMissionResult()))
+                continue;
             return Optional.of(mission);
         }
         return Optional.empty();

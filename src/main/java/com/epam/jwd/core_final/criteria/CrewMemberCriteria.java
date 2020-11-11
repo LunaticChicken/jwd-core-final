@@ -13,7 +13,8 @@ public class CrewMemberCriteria extends Criteria {
     private Boolean isReadyForNextMission;
     private static CrewMemberCriteria instance;
 
-    private CrewMemberCriteria() {}
+    private CrewMemberCriteria() {
+    }
 
     public static CrewMemberCriteria getInstance() {
         if (instance == null) {

@@ -1,10 +1,7 @@
 package com.epam.jwd.core_final.criteria;
 
-import com.epam.jwd.core_final.context.impl.NassaContext;
-import com.epam.jwd.core_final.domain.CrewMember;
 import com.epam.jwd.core_final.domain.Mission;
 import com.epam.jwd.core_final.domain.MissionResult;
-import com.epam.jwd.core_final.domain.Role;
 
 import java.time.LocalDateTime;
 
@@ -18,7 +15,8 @@ public class MissionCriteria extends Criteria {
     private MissionResult missionResult;
     private static MissionCriteria instance;
 
-    private MissionCriteria() {}
+    private MissionCriteria() {
+    }
 
     public static MissionCriteria getInstance() {
         if (instance == null) {
@@ -35,14 +33,17 @@ public class MissionCriteria extends Criteria {
         this.startDate = startDate;
         return this;
     }
+
     public Criteria endDate(LocalDateTime endDate) {
         this.endDate = endDate;
         return this;
     }
+
     public Criteria missionDistance(Long missionDistance) {
         this.missionDistance = missionDistance;
         return this;
     }
+
     public Criteria missionResult(MissionResult missionResult) {
         this.missionResult = missionResult;
         return this;

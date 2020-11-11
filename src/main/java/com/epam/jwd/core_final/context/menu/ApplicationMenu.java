@@ -1,8 +1,10 @@
 package com.epam.jwd.core_final.context.menu;
 
+import com.epam.jwd.core_final.Main;
 import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.domain.ApplicationProperties;
 import com.epam.jwd.core_final.domain.Mission;
+import com.epam.jwd.core_final.domain.MissionResult;
 import com.epam.jwd.core_final.exception.MissionNotCreatedException;
 import com.epam.jwd.core_final.service.impl.CrewServiceImpl;
 import com.epam.jwd.core_final.service.impl.MissionServiceImpl;
@@ -33,12 +35,11 @@ public final class ApplicationMenu extends Menu {
         System.out.println("1 - Show info about entities\n"
                 + "2 - Set filters\n"
                 + "3 - Create mission\n"
-                + "4 - Manage missions\n"
                 + "0 - Exit program");
     }
 
     public void handleUserInput() throws MissionNotCreatedException {
-        logger.info("Main menu was opened");
+        Main.logger.info("Main menu was opened");
         externalLoop:
         while (true) {
             int option = ValidInputUtil.getValidIntNumber(scanner);
@@ -64,7 +65,6 @@ public final class ApplicationMenu extends Menu {
                     Long distance = ValidInputUtil.getValidLongNumber(scanner);
                     Mission newMission = createMission(missionName, startDate, endDate, distance);
                     NassaContext.getInstance().retrieveBaseEntityList(Mission.class).add(newMission);
-                    System.out.println("Mission created!");
                     outputMissionToJSON(newMission);
                     printAvailableOptions();
                     break;
@@ -72,6 +72,7 @@ public final class ApplicationMenu extends Menu {
                     scanner.close();
                     break externalLoop;
                 default:
+                    Main.logger.warn("Unknown command was entered");
                     System.out.println("Unknown command. Please, choose one of these options:");
                     printAvailableOptions();
                     break;
@@ -86,7 +87,10 @@ public final class ApplicationMenu extends Menu {
             String startTime = scanner.next();
             startDateTime = startDate + " " + startTime;
             if (ValidInputUtil.isInputEqualsDateFormat(startDateTime)) break;
-            else System.out.println("Not correct date format! Try again:");
+            else {
+                Main.logger.error("Not correct date format was entered");
+                System.out.println("Not correct date format! Try again:");
+            }
         }
         return startDateTime;
     }
@@ -102,13 +106,30 @@ public final class ApplicationMenu extends Menu {
         }
     }
 
-    private static Mission createMission(String name, String startDate, String endDate, Long distance)
-            throws MissionNotCreatedException {
+    private static Mission createMission(String name, String startDate, String endDate, Long distance) {
         Mission newMission = MissionServiceImpl.getInstance().createMission(name, startDate, endDate, distance);
+        System.out.println("Mission created!");
         if (!SpaceshipServiceImpl.getInstance().assignSpaceshipOnMission(newMission)) {
-            throw new MissionNotCreatedException("No available spaceships for this mission");
+            newMission.setMissionResult(MissionResult.CANCELLED);
+            Main.logger.warn("Mission was canceled as it doesn't have available spaceship");
+            System.out.println("Mission was canceled as it doesn't have available spaceship");
+        } else {
+            newMission.setMissionResult(MissionResult.IN_PROGRESS);
+            Main.logger.info("Mission was started");
+            System.out.println("Mission was started");
         }
         CrewServiceImpl.getInstance().assignCrewMembersOnMission(newMission);
+        double missionResult = Math.random();
+        if (missionResult < 0.1) {
+            newMission.setMissionResult(MissionResult.FAILED);
+            Main.logger.warn("Mission was failed");
+            System.out.println("Oh no, our mission was failed."
+                    + "Nobody could have predicted this ( except Math.random :) )");
+        } else {
+            newMission.setMissionResult(MissionResult.COMPLETED);
+            Main.logger.warn("Mission was launched and completed successfully");
+            System.out.println("Mission was launched and completed successfully!");
+        }
         return newMission;
     }
 }

@@ -4,7 +4,6 @@ import com.epam.jwd.core_final.domain.CrewMember;
 import com.epam.jwd.core_final.domain.Rank;
 import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.factory.EntityFactory;
-import com.epam.jwd.core_final.strategy.CrewReadingStrategy;
 
 // do the same for other entities
 public class CrewMemberFactory implements EntityFactory<CrewMember> {

@@ -51,12 +51,12 @@ public final class TypeConversionUtil {
 
     public static LocalDateTime stringToLocalDateTime(String date) {
         String dateFormat = PropertyReaderUtil.loadProperties().getDateTimeFormat();
-        int year = Integer.parseInt(date.substring(dateFormat.indexOf("y"), dateFormat.indexOf("y") + 3));
-        int month = Integer.parseInt(date.substring(dateFormat.indexOf("M"), dateFormat.indexOf("M") + 1));
-        int day = Integer.parseInt(date.substring(dateFormat.indexOf("d"), dateFormat.indexOf("d") + 1));
-        int hour = Integer.parseInt(date.substring(dateFormat.indexOf("H"), dateFormat.indexOf("H") + 1));
-        int minute = Integer.parseInt(date.substring(dateFormat.indexOf("m"), dateFormat.indexOf("m") + 1));
-        int second = Integer.parseInt(date.substring(dateFormat.indexOf("s"), dateFormat.indexOf("s") + 1));
+        int year = Integer.parseInt(date.substring(dateFormat.indexOf("y"), dateFormat.indexOf("y") + 4));
+        int month = Integer.parseInt(date.substring(dateFormat.indexOf("M"), dateFormat.indexOf("M") + 2));
+        int day = Integer.parseInt(date.substring(dateFormat.indexOf("d"), dateFormat.indexOf("d") + 2));
+        int hour = Integer.parseInt(date.substring(dateFormat.indexOf("H"), dateFormat.indexOf("H") + 2));
+        int minute = Integer.parseInt(date.substring(dateFormat.indexOf("m"), dateFormat.indexOf("m") + 2));
+        int second = Integer.parseInt(date.substring(dateFormat.indexOf("s"), dateFormat.indexOf("s") + 2));
         return LocalDateTime.of(year, month, day, hour, minute, second);
     }
 

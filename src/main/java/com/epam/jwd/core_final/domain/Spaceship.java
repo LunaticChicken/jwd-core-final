@@ -1,8 +1,5 @@
 package com.epam.jwd.core_final.domain;
 
-import com.epam.jwd.core_final.criteria.Criteria;
-import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
-
 import java.util.Map;
 
 /**

@@ -1,13 +1,6 @@
 package com.epam.jwd.core_final.criteria;
 
-import com.epam.jwd.core_final.context.impl.NassaContext;
-import com.epam.jwd.core_final.domain.BaseEntity;
-import com.epam.jwd.core_final.domain.Mission;
-import com.epam.jwd.core_final.domain.Role;
 import com.epam.jwd.core_final.domain.Spaceship;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * Should be a builder for {@link Spaceship} fields
@@ -18,7 +11,8 @@ public class SpaceshipCriteria extends Criteria {
     private Boolean isReadyForNextMission;
     private static SpaceshipCriteria instance;
 
-    private SpaceshipCriteria() {}
+    private SpaceshipCriteria() {
+    }
 
     public static SpaceshipCriteria getInstance() {
         if (instance == null) {

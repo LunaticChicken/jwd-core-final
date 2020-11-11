@@ -1,11 +1,8 @@
 package com.epam.jwd.core_final.domain;
 
-import com.epam.jwd.core_final.context.impl.NassaContext;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Expected fields:
@@ -64,6 +61,10 @@ public class Mission extends AbstractBaseEntity {
 
     public void setAssignedCrew(List<CrewMember> assignedCrew) {
         this.assignedCrew = assignedCrew;
+    }
+
+    public void setMissionResult(MissionResult missionResult) {
+        this.missionResult = missionResult;
     }
 
     @Override

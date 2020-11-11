@@ -1,11 +1,16 @@
 package com.epam.jwd.core_final.context.impl;
 
+import com.epam.jwd.core_final.Main;
 import com.epam.jwd.core_final.context.ApplicationContext;
 import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
 import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.criteria.MissionCriteria;
 import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
-import com.epam.jwd.core_final.domain.*;
+import com.epam.jwd.core_final.domain.ApplicationProperties;
+import com.epam.jwd.core_final.domain.BaseEntity;
+import com.epam.jwd.core_final.domain.CrewMember;
+import com.epam.jwd.core_final.domain.Mission;
+import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.exception.InvalidStateException;
 import com.epam.jwd.core_final.service.impl.CrewServiceImpl;
 import com.epam.jwd.core_final.service.impl.SpaceshipServiceImpl;
@@ -14,12 +19,13 @@ import com.epam.jwd.core_final.strategy.SpaceshipReadingStrategy;
 import com.epam.jwd.core_final.util.PropertyReaderUtil;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 // todo
-public class NassaContext implements ApplicationContext {
+public final class NassaContext implements ApplicationContext {
 
-    ApplicationProperties properties = PropertyReaderUtil.loadProperties();
+    private final ApplicationProperties properties = PropertyReaderUtil.loadProperties();
 
     private Criteria crewCriteria = CrewMemberCriteria.getInstance();
     private Criteria spaceshipCriteria = SpaceshipCriteria.getInstance();
@@ -31,7 +37,8 @@ public class NassaContext implements ApplicationContext {
 
     private static NassaContext instance;
 
-    private NassaContext() {}
+    private NassaContext() {
+    }
 
     public static NassaContext getInstance() {
         if (instance == null) {
@@ -80,6 +87,8 @@ public class NassaContext implements ApplicationContext {
      *
      * @throws InvalidStateException
      */
+    private String crewBeforeReInit = "", spaceshipsBeforeReInit = "";
+
     @Override
     public void init() throws InvalidStateException {
         File inputRootDir = new File(properties.getInputRootDir());
@@ -87,11 +96,23 @@ public class NassaContext implements ApplicationContext {
         for (File file : listFiles) {
             if (file.getName().equals(properties.getCrewFileName())) {
                 String crewInFile = CrewReadingStrategy.getInstance().read(file);
-                populateCrewCollection(crewInFile);
+                if (!crewBeforeReInit.equals(crewInFile)) {
+                    crewMembers.clear();
+                    populateCrewCollection(crewInFile);
+                    crewBeforeReInit = crewInFile;
+                    System.out.println("New crew members in file! Collection was updated");
+                    Main.logger.info("New crew members in file. Collection was updated");
+                }
             }
             if (file.getName().equals(properties.getSpaceshipsFileName())) {
                 String spaceshipsInFile = SpaceshipReadingStrategy.getInstance().read(file);
-                populateSpaceshipsCollection(spaceshipsInFile);
+                if (!spaceshipsBeforeReInit.equals(spaceshipsInFile)) {
+                    spaceships.clear();
+                    populateSpaceshipsCollection(spaceshipsInFile);
+                    spaceshipsBeforeReInit = spaceshipsInFile;
+                    System.out.println("New spaceships in file! Collection was updated");
+                    Main.logger.info("New spaceships in file. Collection was updated");
+                }
             }
         }
     }

@@ -2,7 +2,6 @@ package com.epam.jwd.core_final.service.impl;
 
 import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
-import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.domain.CrewMember;
 import com.epam.jwd.core_final.domain.Mission;
 import com.epam.jwd.core_final.domain.Rank;
@@ -11,9 +10,10 @@ import com.epam.jwd.core_final.factory.impl.CrewMemberFactory;
 import com.epam.jwd.core_final.service.CrewService;
 import com.epam.jwd.core_final.util.TypeConversionUtil;
 
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
 public class CrewServiceImpl implements CrewService {
 
@@ -74,7 +74,10 @@ public class CrewServiceImpl implements CrewService {
     public boolean assignCrewMembersOnMission(Mission mission) throws RuntimeException {
         externalLoop:
         for (CrewMember crewMember : NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class)) {
-            for (Map.Entry<Role, Short> mapEntry : mission.getAssignedSpaceship().getCrew().entrySet()) {
+            for (Map.Entry<Role, Short> mapEntry : mission
+                    .getAssignedSpaceship()
+                    .getCrew()
+                    .entrySet()) {
                 if (mission.getAssignedCrew().stream()
                         .filter(c -> c.getRole() == mapEntry.getKey()).count() >= mapEntry.getValue()) {
                     break externalLoop;
