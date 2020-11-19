@@ -74,8 +74,8 @@ public final class ApplicationMenu extends Menu {
                     String[] missionParameters = scanner.nextLine().split(";");
                     List<Mission> missionList = (List<Mission>) NassaContext.getInstance()
                             .retrieveBaseEntityList(Mission.class);
-                    missionList.set(missionList.size() - 1, createMission(missionParameters[0],
-                            missionParameters[1], missionParameters[2], Long.parseLong(missionParameters[3])));
+                    MissionServiceImpl.getInstance().updateSpaceshipDetails(missionList.get(missionList.size() - 1),
+                            missionParameters);
                     printAvailableOptions();
                     break;
                 case 0:

@@ -18,11 +18,11 @@ import java.util.Objects;
  */
 public class Mission extends AbstractBaseEntity {
     // todo
-    private final LocalDateTime startDate;
-    private final LocalDateTime endDate;
-    private final Long missionDistance;
-    private Spaceship assignedSpaceship;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private Long missionDistance;
     private List<CrewMember> assignedCrew = new ArrayList<>();
+    private Spaceship assignedSpaceship;
     private MissionResult missionResult;
 
     public Mission(String name, LocalDateTime startDate, LocalDateTime endDate, Long missionDistance) {
@@ -60,12 +60,20 @@ public class Mission extends AbstractBaseEntity {
         return assignedCrew;
     }
 
-    public void setAssignedCrew(List<CrewMember> assignedCrew) {
-        this.assignedCrew = assignedCrew;
-    }
-
     public void setMissionResult(MissionResult missionResult) {
         this.missionResult = missionResult;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setMissionDistance(Long missionDistance) {
+        this.missionDistance = missionDistance;
     }
 
     @Override

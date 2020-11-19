@@ -14,7 +14,7 @@ public interface MissionService {
 
     Optional<Mission> findMissionByCriteria(Collection<Mission> missions, MissionCriteria criteria);
 
-    Mission updateSpaceshipDetails(Mission mission);
+    Mission updateSpaceshipDetails(Mission mission, String[] missionParameters);
 
     Mission createMission(String name, String sStartDate, String sEndDate, Long distance);
 }

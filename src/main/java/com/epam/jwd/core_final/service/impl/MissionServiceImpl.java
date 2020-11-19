@@ -46,7 +46,11 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public Mission updateSpaceshipDetails(Mission mission) {
+    public Mission updateSpaceshipDetails(Mission mission, String[] missionParameters) {
+        mission.setName(missionParameters[0]);
+        mission.setStartDate(TypeConversionUtil.stringToLocalDateTime(missionParameters[1]));
+        mission.setEndDate(TypeConversionUtil.stringToLocalDateTime(missionParameters[2]));
+        mission.setMissionDistance(Long.parseLong(missionParameters[3]));
         return null;
     }
 

@@ -6,7 +6,7 @@ import com.epam.jwd.core_final.exception.InvalidStateException;
 
 public interface Application {
 
-    static ApplicationMenu start() throws InvalidStateException {
+    static ApplicationMenu start() {
         // todo
         ReInitDaemonThread daemonReInitThread = new ReInitDaemonThread();
         daemonReInitThread.setDaemon(true);
