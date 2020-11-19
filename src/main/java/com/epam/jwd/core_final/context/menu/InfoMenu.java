@@ -4,10 +4,15 @@ import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
 import com.epam.jwd.core_final.criteria.MissionCriteria;
 import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
+import com.epam.jwd.core_final.domain.CrewMember;
+import com.epam.jwd.core_final.domain.Mission;
+import com.epam.jwd.core_final.domain.Spaceship;
 import com.epam.jwd.core_final.service.impl.CrewServiceImpl;
 import com.epam.jwd.core_final.service.impl.MissionServiceImpl;
 import com.epam.jwd.core_final.service.impl.SpaceshipServiceImpl;
 import com.epam.jwd.core_final.util.ValidInputUtil;
+
+import java.util.Collection;
 
 public final class InfoMenu extends Menu {
     private static InfoMenu instance;
@@ -53,17 +58,20 @@ public final class InfoMenu extends Menu {
     }
 
     private static void showCrewMembersWithFilters() {
-        System.out.println(CrewServiceImpl.getInstance().
-                findAllCrewMembersByCriteria((CrewMemberCriteria) NassaContext.getInstance().getCrewCriteria()));
+        CrewMemberCriteria criteria = (CrewMemberCriteria) NassaContext.getInstance().getCrewCriteria();
+        Collection<CrewMember> crew = NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class);
+        System.out.println(CrewServiceImpl.getInstance().findAllCrewMembersByCriteria(crew, criteria));
     }
 
     private static void showSpaceshipsWithFilters() {
         System.out.println(SpaceshipServiceImpl.getInstance().
-                findAllSpaceshipsByCriteria((SpaceshipCriteria) NassaContext.getInstance().getSpaceshipCriteria()));
+                findAllSpaceshipsByCriteria(NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class),
+                        (SpaceshipCriteria) NassaContext.getInstance().getSpaceshipCriteria()));
     }
 
     private static void showMissionsWithFilters() {
         System.out.println(MissionServiceImpl.getInstance().
-                findAllMissionsByCriteria((MissionCriteria) NassaContext.getInstance().getMissionCriteria()));
+                findAllMissionsByCriteria(NassaContext.getInstance().retrieveBaseEntityList(Mission.class),
+                        (MissionCriteria) NassaContext.getInstance().getMissionCriteria()));
     }
 }

@@ -10,6 +10,8 @@ import com.epam.jwd.core_final.service.SpaceshipService;
 import com.epam.jwd.core_final.util.TypeConversionUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SpaceshipServiceImpl implements SpaceshipService {
 
@@ -31,44 +33,22 @@ public class SpaceshipServiceImpl implements SpaceshipService {
     }
 
     @Override
-    public Collection<Spaceship> findAllSpaceshipsByCriteria(SpaceshipCriteria criteria) {
-        Collection<Spaceship> filteredSpaceships = new ArrayList<>();
-        Collection<Spaceship> spaceships = NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class);
+    public Collection<Spaceship> findAllSpaceshipsByCriteria(Collection<Spaceship> spaceships,
+                                                             SpaceshipCriteria criteria) {
+        return getFilteredSpaceshipStream(spaceships, criteria)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public Optional<Spaceship> findSpaceshipByCriteria(Collection<Spaceship> spaceships,
+                                                       SpaceshipCriteria criteria) {
+        return getFilteredSpaceshipStream(spaceships, criteria)
+                .findFirst();
+    }
+
+    @Override
+    public boolean assignSpaceshipOnMission(Collection<Spaceship> spaceships, Mission mission) throws RuntimeException {
         for (Spaceship spaceship : spaceships) {
-            if (criteria.getId() != null && !spaceship.getId().equals(criteria.getId())) continue;
-            if (criteria.getName() != null && !spaceship.getName().equals(criteria.getName())) continue;
-            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance()))
-                continue;
-            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission()))
-                continue;
-            filteredSpaceships.add(spaceship);
-        }
-        return filteredSpaceships;
-    }
-
-    @Override
-    public Optional<Spaceship> findSpaceshipByCriteria(SpaceshipCriteria criteria) {
-        Collection<Spaceship> spaceships = NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class);
-        for (Spaceship spaceship : spaceships) {
-            if (criteria.getId() != null && !spaceship.getId().equals(criteria.getId())) continue;
-            if (criteria.getName() != null && !spaceship.getName().equals(criteria.getName())) continue;
-            if (criteria.getFlightDistance() != null && !spaceship.getFlightDistance().equals(criteria.getFlightDistance()))
-                continue;
-            if (criteria.getReadyForNextMission() != null && !spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission()))
-                continue;
-            return Optional.of(spaceship);
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public Spaceship updateSpaceshipDetails(Spaceship spaceship) {
-        return null;
-    }
-
-    @Override
-    public boolean assignSpaceshipOnMission(Mission mission) throws RuntimeException {
-        for (Spaceship spaceship : NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class)) {
             if (spaceship.getReadyForNextMission() && spaceship.getFlightDistance() >= mission.getMissionDistance()) {
                 mission.setAssignedSpaceship(spaceship);
                 spaceship.setReadyForNextMission(false);
@@ -85,6 +65,17 @@ public class SpaceshipServiceImpl implements SpaceshipService {
         Long flightDistance = Long.parseLong(spaceshipParameters[1]);
         Map<Role, Short> crew = getCrew(spaceshipParameters[2]);
         return SpaceshipFactory.getInstance().create(name, flightDistance, crew);
+    }
+
+    private Stream<Spaceship> getFilteredSpaceshipStream(Collection<Spaceship> spaceships, SpaceshipCriteria criteria) {
+        return spaceships.stream()
+                .filter(spaceship -> criteria.getId() == null || spaceship.getId().equals(criteria.getId()))
+                .filter(spaceship -> criteria.getName() == null || spaceship.getName().equals(criteria.getName()))
+                .filter(spaceship -> criteria.getFlightDistance() == null
+                        || (spaceship.getFlightDistance() >= criteria.getFlightDistance() - 50000
+                        && spaceship.getFlightDistance() <= criteria.getFlightDistance() + 50000))
+                .filter(spaceship -> criteria.getReadyForNextMission() == null
+                        || spaceship.getReadyForNextMission().equals(criteria.getReadyForNextMission()));
     }
 
     private static Map<Role, Short> getCrew(String crew) {

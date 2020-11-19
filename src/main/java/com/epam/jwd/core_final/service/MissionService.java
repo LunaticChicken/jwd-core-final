@@ -10,9 +10,9 @@ public interface MissionService {
 
     Collection<Mission> findAllMissions();
 
-    Collection<Mission> findAllMissionsByCriteria(MissionCriteria criteria);
+    Collection<Mission> findAllMissionsByCriteria(Collection<Mission> missions, MissionCriteria criteria);
 
-    Optional<Mission> findMissionByCriteria(MissionCriteria criteria);
+    Optional<Mission> findMissionByCriteria(Collection<Mission> missions, MissionCriteria criteria);
 
     Mission updateSpaceshipDetails(Mission mission);
 

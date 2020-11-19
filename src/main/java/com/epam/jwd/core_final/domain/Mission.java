@@ -3,6 +3,7 @@ package com.epam.jwd.core_final.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Expected fields:
@@ -17,9 +18,9 @@ import java.util.List;
  */
 public class Mission extends AbstractBaseEntity {
     // todo
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private Long missionDistance;
+    private final LocalDateTime startDate;
+    private final LocalDateTime endDate;
+    private final Long missionDistance;
     private Spaceship assignedSpaceship;
     private List<CrewMember> assignedCrew = new ArrayList<>();
     private MissionResult missionResult;
@@ -77,5 +78,23 @@ public class Mission extends AbstractBaseEntity {
                 ", assignedCrew=" + assignedCrew +
                 ", missionResult=" + missionResult +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mission mission = (Mission) o;
+        return startDate.equals(mission.startDate) &&
+                endDate.equals(mission.endDate) &&
+                missionDistance.equals(mission.missionDistance) &&
+                Objects.equals(assignedSpaceship, mission.assignedSpaceship) &&
+                Objects.equals(assignedCrew, mission.assignedCrew) &&
+                missionResult == mission.missionResult;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startDate, endDate, missionDistance, assignedSpaceship, assignedCrew, missionResult);
     }
 }

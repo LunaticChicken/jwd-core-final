@@ -1,5 +1,7 @@
 package com.epam.jwd.core_final.domain;
 
+import java.util.Objects;
+
 /**
  * Expected fields:
  * <p>
@@ -9,8 +11,8 @@ package com.epam.jwd.core_final.domain;
  */
 public class CrewMember extends AbstractBaseEntity {
     // todo
-    private Role role;
-    private Rank rank;
+    private final Role role;
+    private final Rank rank;
     private Boolean isReadyForNextMission = true;
 
     public CrewMember(Role role, String name, Rank rank) {

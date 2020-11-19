@@ -2,10 +2,7 @@ package com.epam.jwd.core_final.service.impl;
 
 import com.epam.jwd.core_final.context.impl.NassaContext;
 import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
-import com.epam.jwd.core_final.domain.CrewMember;
-import com.epam.jwd.core_final.domain.Mission;
-import com.epam.jwd.core_final.domain.Rank;
-import com.epam.jwd.core_final.domain.Role;
+import com.epam.jwd.core_final.domain.*;
 import com.epam.jwd.core_final.factory.impl.CrewMemberFactory;
 import com.epam.jwd.core_final.service.CrewService;
 import com.epam.jwd.core_final.util.TypeConversionUtil;
@@ -14,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CrewServiceImpl implements CrewService {
 
@@ -35,45 +34,23 @@ public class CrewServiceImpl implements CrewService {
     }
 
     @Override
-    public Collection<CrewMember> findAllCrewMembersByCriteria(CrewMemberCriteria criteria) {
-        Collection<CrewMember> filteredCrew = new ArrayList<>();
-        Collection<CrewMember> crew = NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class);
-        for (CrewMember crewMember : crew) {
-            if (criteria.getId() != null && !crewMember.getId().equals(criteria.getId())) continue;
-            if (criteria.getName() != null && !crewMember.getName().equals(criteria.getName())) continue;
-            if (criteria.getRank() != null && !crewMember.getRank().equals(criteria.getRank())) continue;
-            if (criteria.getRole() != null && !crewMember.getRole().equals(criteria.getRole())) continue;
-            if (criteria.getReadyForNextMission() != null
-                    && crewMember.getReadyForNextMission().equals(criteria.getReadyForNextMission())) continue;
-            filteredCrew.add(crewMember);
-        }
-        return filteredCrew;
+    public Collection<CrewMember> findAllCrewMembersByCriteria(Collection<CrewMember> crew,
+                                                               CrewMemberCriteria criteria) {
+        return getFilteredCrewStream(crew, criteria)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
-    public Optional<CrewMember> findCrewMemberByCriteria(CrewMemberCriteria criteria) {
-        Collection<CrewMember> crew = NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class);
-        for (CrewMember crewMember : crew) {
-            if (criteria.getId() != null && !crewMember.getId().equals(criteria.getId())) continue;
-            if (criteria.getName() != null && !crewMember.getName().equals(criteria.getName())) continue;
-            if (criteria.getRank() != null && !crewMember.getRank().equals(criteria.getRank())) continue;
-            if (criteria.getRole() != null && !crewMember.getRole().equals(criteria.getRole())) continue;
-            if (criteria.getReadyForNextMission() != null
-                    && crewMember.getReadyForNextMission().equals(criteria.getReadyForNextMission())) continue;
-            return Optional.of(crewMember);
-        }
-        return Optional.empty();
+    public Optional<CrewMember> findCrewMemberByCriteria(Collection<CrewMember> crew,
+                                                         CrewMemberCriteria criteria) {
+        return getFilteredCrewStream(crew, criteria)
+                .findFirst();
     }
 
     @Override
-    public CrewMember updateCrewMemberDetails(CrewMember crewMember) {
-        return null;
-    }
-
-    @Override
-    public boolean assignCrewMembersOnMission(Mission mission) throws RuntimeException {
+    public boolean assignCrewMembersOnMission(Collection<CrewMember> crewMembers, Mission mission) {
         externalLoop:
-        for (CrewMember crewMember : NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class)) {
+        for (CrewMember crewMember : crewMembers) {
             for (Map.Entry<Role, Short> mapEntry : mission
                     .getAssignedSpaceship()
                     .getCrew()
@@ -98,5 +75,13 @@ public class CrewServiceImpl implements CrewService {
         String name = crewMemberParameters[1];
         Rank rank = TypeConversionUtil.stringToRank(crewMemberParameters[2]);
         return CrewMemberFactory.getInstance().create(role, name, rank);
+    }
+
+    private Stream<CrewMember> getFilteredCrewStream(Collection<CrewMember> crew, CrewMemberCriteria criteria) {
+        return crew.stream()
+                .filter(crewMember -> criteria.getId() == null || crewMember.getId().equals(criteria.getId()))
+                .filter(crewMember -> criteria.getName() == null || crewMember.getName().equals(criteria.getName()))
+                .filter(crewMember -> criteria.getRank() == null || crewMember.getRank().equals(criteria.getRank()))
+                .filter(crewMember -> criteria.getRole() == null || crewMember.getRole().equals(criteria.getRole()));
     }
 }

@@ -15,14 +15,14 @@ public interface SpaceshipService {
 
     Collection<Spaceship> findAllSpaceships();
 
-    Collection<Spaceship> findAllSpaceshipsByCriteria(SpaceshipCriteria criteria);
+    Collection<Spaceship> findAllSpaceshipsByCriteria(Collection<Spaceship> spaceships,
+                                                      SpaceshipCriteria criteria);
 
-    Optional<Spaceship> findSpaceshipByCriteria(SpaceshipCriteria criteria);
-
-    Spaceship updateSpaceshipDetails(Spaceship spaceship);
+    Optional<Spaceship> findSpaceshipByCriteria(Collection<Spaceship> spaceships,
+                                                SpaceshipCriteria criteria);
 
     // todo create custom exception for case, when spaceship is not able to be assigned
-    boolean assignSpaceshipOnMission(Mission mission) throws RuntimeException;
+    boolean assignSpaceshipOnMission(Collection<Spaceship> spaceships, Mission mission) throws RuntimeException;
 
     // todo create custom exception for case, when crewMember is not able to be created (for example - duplicate.
     // spaceship unique criteria - only name!

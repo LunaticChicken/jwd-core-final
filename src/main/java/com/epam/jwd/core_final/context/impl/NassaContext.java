@@ -6,11 +6,7 @@ import com.epam.jwd.core_final.criteria.CrewMemberCriteria;
 import com.epam.jwd.core_final.criteria.Criteria;
 import com.epam.jwd.core_final.criteria.MissionCriteria;
 import com.epam.jwd.core_final.criteria.SpaceshipCriteria;
-import com.epam.jwd.core_final.domain.ApplicationProperties;
-import com.epam.jwd.core_final.domain.BaseEntity;
-import com.epam.jwd.core_final.domain.CrewMember;
-import com.epam.jwd.core_final.domain.Mission;
-import com.epam.jwd.core_final.domain.Spaceship;
+import com.epam.jwd.core_final.domain.*;
 import com.epam.jwd.core_final.exception.InvalidStateException;
 import com.epam.jwd.core_final.service.impl.CrewServiceImpl;
 import com.epam.jwd.core_final.service.impl.SpaceshipServiceImpl;
@@ -100,8 +96,8 @@ public final class NassaContext implements ApplicationContext {
                     crewMembers.clear();
                     populateCrewCollection(crewInFile);
                     crewBeforeReInit = crewInFile;
-                    System.out.println("New crew members in file! Collection was updated");
-                    Main.logger.info("New crew members in file. Collection was updated");
+                    System.out.println("New changes in crew file! Collection was updated");
+                    Main.logger.info("New changes in crew file. Collection was updated");
                 }
             }
             if (file.getName().equals(properties.getSpaceshipsFileName())) {
@@ -110,8 +106,8 @@ public final class NassaContext implements ApplicationContext {
                     spaceships.clear();
                     populateSpaceshipsCollection(spaceshipsInFile);
                     spaceshipsBeforeReInit = spaceshipsInFile;
-                    System.out.println("New spaceships in file! Collection was updated");
-                    Main.logger.info("New spaceships in file. Collection was updated");
+                    System.out.println("New changes in spaceships file! Collection was updated");
+                    Main.logger.info("New changes in spaceships file. Collection was updated");
                 }
             }
         }

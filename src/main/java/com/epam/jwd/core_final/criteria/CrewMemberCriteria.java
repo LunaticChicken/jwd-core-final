@@ -27,17 +27,17 @@ public class CrewMemberCriteria extends Criteria {
         instance = new CrewMemberCriteria();
     }
 
-    public Criteria role(Role role) {
+    public CrewMemberCriteria role(Role role) {
         this.role = role;
         return this;
     }
 
-    public Criteria rank(Rank rank) {
+    public CrewMemberCriteria rank(Rank rank) {
         this.rank = rank;
         return this;
     }
 
-    public Criteria isReadyForNextMission(Boolean isReadyForNextMission) {
+    public CrewMemberCriteria isReadyForNextMission(Boolean isReadyForNextMission) {
         this.isReadyForNextMission = isReadyForNextMission;
         return this;
     }

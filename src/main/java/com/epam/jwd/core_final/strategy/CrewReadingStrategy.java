@@ -19,8 +19,7 @@ public class CrewReadingStrategy implements ReadingStrategy {
     @Override
     public String read(File file) {
         String crewInFile = null;
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.readLine();
             crewInFile = reader.readLine();
         } catch (IOException e) {

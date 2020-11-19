@@ -29,22 +29,22 @@ public class MissionCriteria extends Criteria {
         instance = new MissionCriteria();
     }
 
-    public Criteria startDate(LocalDateTime startDate) {
+    public MissionCriteria startDate(LocalDateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public Criteria endDate(LocalDateTime endDate) {
+    public MissionCriteria endDate(LocalDateTime endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public Criteria missionDistance(Long missionDistance) {
+    public MissionCriteria missionDistance(Long missionDistance) {
         this.missionDistance = missionDistance;
         return this;
     }
 
-    public Criteria missionResult(MissionResult missionResult) {
+    public MissionCriteria missionResult(MissionResult missionResult) {
         this.missionResult = missionResult;
         return this;
     }

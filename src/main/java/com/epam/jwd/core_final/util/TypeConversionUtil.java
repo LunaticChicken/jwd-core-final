@@ -1,10 +1,8 @@
 package com.epam.jwd.core_final.util;
 
-import com.epam.jwd.core_final.domain.ApplicationProperties;
 import com.epam.jwd.core_final.domain.Rank;
 import com.epam.jwd.core_final.domain.Role;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public final class TypeConversionUtil {
@@ -28,9 +26,9 @@ public final class TypeConversionUtil {
             case "1":
                 return Rank.TRAINEE;
             case "2":
-                return Rank.FIRST_OFFICER;
-            case "3":
                 return Rank.SECOND_OFFICER;
+            case "3":
+                return Rank.FIRST_OFFICER;
             case "4":
                 return Rank.CAPTAIN;
             default:

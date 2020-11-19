@@ -2,9 +2,7 @@ package com.epam.jwd.core_final.context.menu;
 
 import com.epam.jwd.core_final.Main;
 import com.epam.jwd.core_final.context.impl.NassaContext;
-import com.epam.jwd.core_final.domain.ApplicationProperties;
-import com.epam.jwd.core_final.domain.Mission;
-import com.epam.jwd.core_final.domain.MissionResult;
+import com.epam.jwd.core_final.domain.*;
 import com.epam.jwd.core_final.exception.MissionNotCreatedException;
 import com.epam.jwd.core_final.service.impl.CrewServiceImpl;
 import com.epam.jwd.core_final.service.impl.MissionServiceImpl;
@@ -15,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 // todo replace Object with your own types
@@ -35,6 +34,7 @@ public final class ApplicationMenu extends Menu {
         System.out.println("1 - Show info about entities\n"
                 + "2 - Set filters\n"
                 + "3 - Create mission\n"
+                + "4 - Update last mission\n"
                 + "0 - Exit program");
     }
 
@@ -66,6 +66,16 @@ public final class ApplicationMenu extends Menu {
                     Mission newMission = createMission(missionName, startDate, endDate, distance);
                     NassaContext.getInstance().retrieveBaseEntityList(Mission.class).add(newMission);
                     outputMissionToJSON(newMission);
+                    printAvailableOptions();
+                    break;
+                case 4:
+                    System.out.println("Enter new mission parameters (name;startDate;endDate;distance)");
+                    scanner.nextLine();
+                    String[] missionParameters = scanner.nextLine().split(";");
+                    List<Mission> missionList = (List<Mission>) NassaContext.getInstance()
+                            .retrieveBaseEntityList(Mission.class);
+                    missionList.set(missionList.size() - 1, createMission(missionParameters[0],
+                            missionParameters[1], missionParameters[2], Long.parseLong(missionParameters[3])));
                     printAvailableOptions();
                     break;
                 case 0:
@@ -106,19 +116,28 @@ public final class ApplicationMenu extends Menu {
         }
     }
 
-    private static Mission createMission(String name, String startDate, String endDate, Long distance) {
+    private static Mission createMission(String name, String startDate, String endDate, Long distance)
+            throws MissionNotCreatedException {
         Mission newMission = MissionServiceImpl.getInstance().createMission(name, startDate, endDate, distance);
-        System.out.println("Mission created!");
-        if (!SpaceshipServiceImpl.getInstance().assignSpaceshipOnMission(newMission)) {
-            newMission.setMissionResult(MissionResult.CANCELLED);
-            Main.logger.warn("Mission was canceled as it doesn't have available spaceship");
-            System.out.println("Mission was canceled as it doesn't have available spaceship");
+        if (NassaContext.getInstance().retrieveBaseEntityList(Mission.class)
+                .stream()
+                .map(BaseEntity::getName)
+                .anyMatch(missionName -> missionName.equals(newMission.getName()))) {
+            throw new MissionNotCreatedException("Mission with this name was already created");
+        }
+        if (!SpaceshipServiceImpl.getInstance().assignSpaceshipOnMission(
+                NassaContext.getInstance().retrieveBaseEntityList(Spaceship.class),
+                newMission)) {
+            Main.logger.error("No available spaceships to the mission");
+            throw new MissionNotCreatedException("No available spaceships to the mission");
         } else {
             newMission.setMissionResult(MissionResult.IN_PROGRESS);
+            System.out.println("Mission created!");
             Main.logger.info("Mission was started");
             System.out.println("Mission was started");
         }
-        CrewServiceImpl.getInstance().assignCrewMembersOnMission(newMission);
+        CrewServiceImpl.getInstance().assignCrewMembersOnMission(
+                NassaContext.getInstance().retrieveBaseEntityList(CrewMember.class), newMission);
         double missionResult = Math.random();
         if (missionResult < 0.1) {
             newMission.setMissionResult(MissionResult.FAILED);

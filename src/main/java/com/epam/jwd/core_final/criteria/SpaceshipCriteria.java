@@ -25,12 +25,12 @@ public class SpaceshipCriteria extends Criteria {
         instance = new SpaceshipCriteria();
     }
 
-    public Criteria flightDistance(Long flightDistance) {
+    public SpaceshipCriteria flightDistance(Long flightDistance) {
         this.flightDistance = flightDistance;
         return this;
     }
 
-    public Criteria isReadyForNextMission(Boolean isReadyForNextMission) {
+    public SpaceshipCriteria isReadyForNextMission(Boolean isReadyForNextMission) {
         this.isReadyForNextMission = isReadyForNextMission;
         return this;
     }

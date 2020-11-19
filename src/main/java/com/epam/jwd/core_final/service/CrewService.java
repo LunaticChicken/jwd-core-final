@@ -15,14 +15,12 @@ public interface CrewService {
 
     Collection<CrewMember> findAllCrewMembers();
 
-    Collection<CrewMember> findAllCrewMembersByCriteria(CrewMemberCriteria criteria);
+    Collection<CrewMember> findAllCrewMembersByCriteria(Collection<CrewMember> crew, CrewMemberCriteria criteria);
 
-    Optional<CrewMember> findCrewMemberByCriteria(CrewMemberCriteria criteria);
-
-    CrewMember updateCrewMemberDetails(CrewMember crewMember);
+    Optional<CrewMember> findCrewMemberByCriteria(Collection<CrewMember> crew, CrewMemberCriteria criteria);
 
     // todo create custom exception for case, when crewMember is not able to be assigned
-    boolean assignCrewMembersOnMission(Mission mission) throws RuntimeException;
+    boolean assignCrewMembersOnMission(Collection<CrewMember> crewMembers, Mission mission) throws RuntimeException;
 
     // todo create custom exception for case, when crewMember is not able to be created (for example - duplicate.
     // crewmember unique criteria - only name!

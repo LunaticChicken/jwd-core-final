@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MissionServiceImpl implements MissionService {
 
@@ -32,38 +34,15 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public Collection<Mission> findAllMissionsByCriteria(MissionCriteria criteria) {
-        Collection<Mission> filteredMissions = new ArrayList<>();
-        Collection<Mission> missions = NassaContext.getInstance().retrieveBaseEntityList(Mission.class);
-        for (Mission mission : missions) {
-            if (criteria.getId() != null && !mission.getId().equals(criteria.getId())) continue;
-            if (criteria.getName() != null && !mission.getName().equals(criteria.getName())) continue;
-            if (criteria.getMissionDistance() != null && !mission.getMissionDistance().equals(criteria.getMissionDistance()))
-                continue;
-            if (criteria.getStartDate() != null && !mission.getStartDate().equals(criteria.getStartDate())) continue;
-            if (criteria.getEndDate() != null && !mission.getEndDate().equals(criteria.getEndDate())) continue;
-            if (criteria.getMissionResult() != null && !mission.getMissionResult().equals(criteria.getMissionResult()))
-                continue;
-            filteredMissions.add(mission);
-        }
-        return filteredMissions;
+    public Collection<Mission> findAllMissionsByCriteria(Collection<Mission> missions, MissionCriteria criteria) {
+        return getFilteredMissionStream(missions, criteria)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
-    public Optional<Mission> findMissionByCriteria(MissionCriteria criteria) {
-        Collection<Mission> missions = NassaContext.getInstance().retrieveBaseEntityList(Mission.class);
-        for (Mission mission : missions) {
-            if (criteria.getId() != null && !mission.getId().equals(criteria.getId())) continue;
-            if (criteria.getName() != null && !mission.getName().equals(criteria.getName())) continue;
-            if (criteria.getMissionDistance() != null && !mission.getMissionDistance().equals(criteria.getMissionDistance()))
-                continue;
-            if (criteria.getStartDate() != null && !mission.getStartDate().equals(criteria.getStartDate())) continue;
-            if (criteria.getEndDate() != null && !mission.getEndDate().equals(criteria.getEndDate())) continue;
-            if (criteria.getMissionResult() != null && !mission.getMissionResult().equals(criteria.getMissionResult()))
-                continue;
-            return Optional.of(mission);
-        }
-        return Optional.empty();
+    public Optional<Mission> findMissionByCriteria(Collection<Mission> missions, MissionCriteria criteria) {
+        return getFilteredMissionStream(missions, criteria)
+                .findFirst();
     }
 
     @Override
@@ -76,5 +55,22 @@ public class MissionServiceImpl implements MissionService {
         LocalDateTime startDate = TypeConversionUtil.stringToLocalDateTime(sStartDate);
         LocalDateTime endDate = TypeConversionUtil.stringToLocalDateTime(sEndDate);
         return MissionFactory.getInstance().create(name, startDate, endDate, distance);
+    }
+
+    private Stream<Mission> getFilteredMissionStream(Collection<Mission> missions, MissionCriteria criteria) {
+        return missions.stream()
+                .filter(mission -> criteria.getId() == null
+                        || mission.getId().equals(criteria.getId()))
+                .filter(mission -> criteria.getName() == null
+                        || mission.getName().equals(criteria.getName()))
+                .filter(mission -> criteria.getMissionDistance() == null
+                        || (mission.getMissionDistance() >= criteria.getMissionDistance() - 50000
+                        && mission.getMissionDistance() <= criteria.getMissionDistance() + 50000))
+                .filter(mission -> criteria.getStartDate() == null
+                        || mission.getStartDate().equals(criteria.getStartDate()))
+                .filter(mission -> criteria.getEndDate() == null
+                        || mission.getEndDate().equals(criteria.getEndDate()))
+                .filter(mission -> criteria.getMissionResult() == null
+                        || mission.getMissionResult().equals(criteria.getMissionResult()));
     }
 }
